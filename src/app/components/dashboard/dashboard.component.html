@@ -1,0 +1,16 @@
+<div class="container">
+    <div>
+        <app-limit (limitChange)="onLimitChange()"></app-limit>
+    </div>
+    <div *ngIf="!isLoading; else loader" class="posts">
+        <ng-container *ngFor="let post of posts">
+            <app-post [post]="post"></app-post>
+        </ng-container>
+    </div>
+    <div>
+        <app-pagination (nextPage)="onNextPage()" (previousPage)="onPreviousPage()"></app-pagination>
+    </div>
+</div>
+<ng-template #loader>
+    <mat-spinner></mat-spinner>
+</ng-template>

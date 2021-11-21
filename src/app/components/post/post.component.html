@@ -1,0 +1,21 @@
+<mat-card class="card">
+    <mat-card-header class="header">
+        <mat-card-title>{{ post.data.title }}</mat-card-title>
+        <mat-card-subtitle>{{
+            post.data.created_utc * 1000 | date
+            }}</mat-card-subtitle>
+    </mat-card-header>
+    <div class="image">
+        <img mat-card-image src="{{  hasThumbnail() ? post.data.thumbnail : placeholder }}" alt="Image of {{ post.data.title }}" />
+    </div>
+    <mat-card-actions class="actions">
+        <button mat-raised-button color="primary" (click)="onPostOpen()">
+            Show details
+        </button>
+    </mat-card-actions>
+    <mat-card-footer class="footer">
+        <p>Comments: {{ post.data.num_comments }}</p>
+        <p>Score: {{ post.data.score }}</p>
+        <p>Author: {{ post.data.author }}</p>
+    </mat-card-footer>
+</mat-card>

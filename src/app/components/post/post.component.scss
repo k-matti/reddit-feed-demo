@@ -1,0 +1,33 @@
+
+.card {
+  display: flex;
+  flex-direction: column;
+  width: 400px;
+  height: auto;
+
+  .header ::ng-deep * {
+    align-items: flex-start;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .image {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .footer {
+    display: flex;
+    flex-direction: row;
+    font-weight: bold;
+    justify-content: space-between;
+    margin-left: 5px;
+    margin-right: 5px;
+  }
+
+  .actions {
+    margin-left: 5px;
+  }
+}

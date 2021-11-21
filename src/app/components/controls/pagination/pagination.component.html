@@ -1,0 +1,9 @@
+<div class="container">
+    <button mat-stroked-button color="primary" *ngIf="currentPage !== 1" (click)="onPreviousPage()">
+        Previous page
+    </button>
+    <span class="paging">Page: {{ currentPage }}</span>
+    <button mat-stroked-button color="primary" (click)="onNextPage()">
+        Next page
+    </button>
+</div>
