@@ -44,8 +44,12 @@ export class RedditService {
       params = params.append("after", this.sessionService.after);
     }
 
-    if (page === "previousPage") {
-      params = params.append("before", this.sessionService.after);
+    if (
+      page === "previousPage" &&
+      this.sessionService.before &&
+      this.sessionService.currentPage != 1
+    ) {
+      params = params.append("before", this.sessionService.before);
     }
 
     return this.httpClient
