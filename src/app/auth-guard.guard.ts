@@ -5,20 +5,20 @@ import {
   UrlTree,
 } from "@angular/router";
 import { Observable } from "rxjs";
-import { SessionService } from "./services/session.service";
+import { Location } from "@angular/common";
 
 @Injectable({
   providedIn: "root",
 })
 export class AuthGuard implements CanActivate {
-  constructor(private sessionService: SessionService, public router: Router) { }
+  constructor(private location: Location, public router: Router) { }
 
   canActivate():
     | Observable<boolean | UrlTree>
     | Promise<boolean | UrlTree>
     | boolean
     | UrlTree {
-    if (this.sessionService.selectedPostData != null) {
+    if (this.location.getState() != null) {
       return true;
     } else {
       this.router.navigate(["/dashboard"]);

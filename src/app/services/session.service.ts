@@ -6,7 +6,6 @@ import { Post, PostData } from "../models";
 })
 export class SessionService {
   public posts: Post[];
-  public selectedPostData: PostData | null;
   public currentPage: number;
   public currentLimit: number;
   public after: string;
@@ -14,7 +13,6 @@ export class SessionService {
 
   constructor() {
     this.posts = [];
-    this.selectedPostData = null;
     this.currentPage = 1;
     this.currentLimit = 10;
     this.after = "";

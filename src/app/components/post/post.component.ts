@@ -1,7 +1,6 @@
 import { Component, Input } from "@angular/core";
 import { Router } from "@angular/router";
 import { Post } from "src/app/models";
-import { SessionService } from "src/app/services/session.service";
 
 @Component({
   selector: "app-post",
@@ -14,14 +13,10 @@ export class PostComponent {
 
   public placeholder = "assets/placeholder.png";
 
-  constructor(
-    private readonly router: Router,
-    private sessionService: SessionService
-  ) {}
+  constructor(private readonly router: Router) {}
 
   public onPostOpen() {
-    this.sessionService.selectedPostData = this.post.data;
-    this.router.navigate(["/post-details"]);
+    this.router.navigate(["/post-details"], { state: this.post.data });
   }
 
   public hasThumbnail() {

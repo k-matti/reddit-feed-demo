@@ -24,15 +24,12 @@ import { SessionService } from "src/app/services/session.service";
 export class PostDetailsComponent implements OnInit {
   public postData: PostData | null;
 
-  constructor(
-    private location: Location,
-    private sessionService: SessionService
-  ) {
+  constructor(private location: Location) {
     this.postData = null;
   }
 
   ngOnInit(): void {
-    this.postData = this.sessionService.selectedPostData;
+    this.postData = this.location.getState() as PostData;
   }
 
   goBack(): void {
