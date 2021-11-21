@@ -1,5 +1,5 @@
 import { Component, OnDestroy } from "@angular/core";
-import { Subject, takeUntil } from "rxjs";
+import { Observable, of, Subject, takeUntil } from "rxjs";
 import { FeedData, Post } from "src/app/models";
 import { LoadingService } from "src/app/services/loading.service";
 import { RedditService } from "src/app/services/reddit.service";
@@ -17,7 +17,7 @@ export class DashboardComponent implements OnDestroy {
 
   public after: string;
   public before: string | null;
-  public isLoading: boolean;
+  public isLoading$: Observable<boolean>;
 
   constructor(
     private redditService: RedditService,
@@ -27,12 +27,12 @@ export class DashboardComponent implements OnDestroy {
     this.posts = this.sessionService.posts;
     this.after = this.sessionService.after;
     this.before = this.sessionService.before;
-    this.isLoading = true;
+    this.isLoading$ = of(false);
   }
 
   public ngOnInit(): void {
     this.getFeedData(null);
-    this.loadingService.isLoading$().subscribe((x) => (this.isLoading = x));
+    this.isLoading$ = this.loadingService.isLoading$();
   }
 
   public onLimitChange() {

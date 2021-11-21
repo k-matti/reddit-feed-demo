@@ -2,7 +2,7 @@
     <div>
         <app-limit (limitChange)="onLimitChange()"></app-limit>
     </div>
-    <div *ngIf="!isLoading; else loader" class="posts">
+    <div *ngIf="(isLoading$ | async) === false; else loader" class="posts">
         <ng-container *ngFor="let post of posts">
             <app-post [post]="post"></app-post>
         </ng-container>
