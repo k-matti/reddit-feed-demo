@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { PostData } from "src/app/models";
 import { Location } from "@angular/common";
-import { SessionService } from "src/app/services/session.service";
 
 @Component({
   selector: "app-post-details",

@@ -1,33 +1,35 @@
-import { Component, EventEmitter, Output } from "@angular/core";
-import { SessionService } from "src/app/services/session.service";
+import { Component, EventEmitter, OnInit, Output } from "@angular/core";
+import { Store } from "@ngrx/store";
+import {
+  AppState,
+  currentPage,
+} from "src/app/store/selectors/reddit.selectors";
 
 @Component({
   selector: "app-pagination",
   templateUrl: "pagination.component.html",
   styleUrls: ["pagination.component.scss"],
 })
-export class PaginationComponent {
+export class PaginationComponent implements OnInit {
   @Output()
   public nextPage = new EventEmitter();
 
   @Output()
   public previousPage = new EventEmitter();
 
-  public currentPage: number;
+  public currentPage: number = 1;
 
-  constructor(private sesionService: SessionService) {
-    this.currentPage = this.sesionService.currentPage;
+  constructor(private readonly store: Store<AppState>) {}
+
+  ngOnInit(): void {
+    this.store.select(currentPage).subscribe((x) => (this.currentPage = x));
   }
 
   public onNextPage() {
-    this.currentPage = this.currentPage + 1;
-    this.sesionService.currentPage = this.currentPage;
     this.nextPage.emit();
   }
 
   public onPreviousPage() {
-    this.currentPage = this.currentPage - 1;
-    this.sesionService.currentPage = this.currentPage;
-    this.previousPage.emit(this.currentPage);
+    this.previousPage.emit();
   }
 }

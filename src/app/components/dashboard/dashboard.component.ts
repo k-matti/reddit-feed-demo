@@ -1,9 +1,10 @@
 import { Component, OnDestroy } from "@angular/core";
-import { Observable, of, Subject, takeUntil } from "rxjs";
-import { FeedData, Post } from "src/app/models";
+import { Store } from "@ngrx/store";
+import { Observable, of, Subject } from "rxjs";
+import { Post } from "src/app/models";
 import { LoadingService } from "src/app/services/loading.service";
-import { RedditService } from "src/app/services/reddit.service";
-import { SessionService } from "src/app/services/session.service";
+import { RedditActions } from "src/app/store/actions/reddit.actions";
+import { AppState, posts } from "src/app/store/selectors/reddit.selectors";
 
 @Component({
   selector: "app-dashboard",
@@ -14,53 +15,33 @@ export class DashboardComponent implements OnDestroy {
   destroy$: Subject<boolean> = new Subject<boolean>();
 
   public posts: Post[];
-
-  public after: string;
-  public before: string | null;
   public isLoading$: Observable<boolean>;
 
-  constructor(
-    private redditService: RedditService,
-    private sessionService: SessionService,
-    private loadingService: LoadingService
-  ) {
-    this.posts = this.sessionService.posts;
-    this.after = this.sessionService.after;
-    this.before = this.sessionService.before;
+  constructor(private store: Store<AppState>, private loadingService: LoadingService) {
+    this.posts = [];
     this.isLoading$ = of(false);
   }
 
   public ngOnInit(): void {
-    this.getFeedData(null);
     this.isLoading$ = this.loadingService.isLoading$();
+    this.store.dispatch(RedditActions.GET_POSTS());
+    this.store.select(posts).subscribe((x) => (this.posts = x));
   }
 
-  public onLimitChange() {
-    this.getFeedData(null);
+  public onLimitChange(newLimit: number) {
+    this.store.dispatch(RedditActions.SET_LIMIT({ newLimit }));
   }
 
   public onPreviousPage() {
-    this.getFeedData("previousPage");
+    this.store.dispatch(RedditActions.GO_TO_PREVIOUS_PAGE());
   }
 
   public onNextPage() {
-    this.getFeedData("nextPage");
+    this.store.dispatch(RedditActions.GO_TO_NEXT_PAGE());
   }
 
   public ngOnDestroy() {
     this.destroy$.next(true);
     this.destroy$.unsubscribe();
-  }
-
-  private getFeedData(page: string | null): void {
-    this.redditService
-      .fetchData(page)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((feedData: FeedData) => {
-        this.sessionService.before = feedData.before ?? null;
-        this.sessionService.after = feedData.after;
-        this.sessionService.posts = feedData.children;
-        this.posts = this.sessionService.posts;
-      });
   }
 }

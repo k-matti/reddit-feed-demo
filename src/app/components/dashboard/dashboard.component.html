@@ -1,6 +1,6 @@
 <div class="container">
     <div>
-        <app-limit (limitChange)="onLimitChange()"></app-limit>
+        <app-limit (limitChange)="onLimitChange($event)"></app-limit>
     </div>
     <div *ngIf="(isLoading$ | async) === false; else loader" class="posts">
         <ng-container *ngFor="let post of posts">

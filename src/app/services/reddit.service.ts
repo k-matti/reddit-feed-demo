@@ -2,12 +2,10 @@ import {
   HttpClient,
   HttpErrorResponse,
   HttpParams,
-  HttpParamsOptions,
 } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { catchError, map, throwError } from "rxjs";
 import { RedditApiResponse } from "../models";
-import { SessionService } from "./session.service";
 
 export interface QueryParams {
   count: string;
@@ -22,34 +20,27 @@ export interface QueryParams {
 export class RedditService {
   public feedUrl = "https://www.reddit.com/r/poland/top.json?t=all";
 
-  constructor(
-    private httpClient: HttpClient,
-    private sessionService: SessionService
-  ) {}
+  constructor(private httpClient: HttpClient) {}
 
-  public fetchData(page: string | null) {
+  public fetchData(
+    limit: number,
+    page: number,
+    after: string | null,
+    before: string | null
+  ) {
     let paramsOptions = {
-      count:
-        this.sessionService.currentPage !== 1
-          ? (
-              this.sessionService.currentLimit * this.sessionService.currentPage
-            ).toString()
-          : "0",
-      limit: this.sessionService.currentLimit.toString(), //reddit return 11 or 12 items for limit 10
+      count: page !== 1 ? (limit * page).toString() : "0",
+      limit: limit.toString(), //reddit return 11 or 12 items for limit 10
     };
 
     let params = new HttpParams({ fromObject: paramsOptions });
 
-    if (page === "nextPage") {
-      params = params.append("after", this.sessionService.after);
+    if (after) {
+      params = params.append("after", after);
     }
 
-    if (
-      page === "previousPage" &&
-      this.sessionService.before &&
-      this.sessionService.currentPage != 1
-    ) {
-      params = params.append("before", this.sessionService.before);
+    if (before) {
+      params = params.append("before", before);
     }
 
     return this.httpClient

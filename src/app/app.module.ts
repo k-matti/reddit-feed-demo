@@ -17,6 +17,11 @@ import { DashboardComponent } from "./components/dashboard/dashboard.component";
 import { LimitComponent } from "./components/controls/limit/limit.component";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { LoadingInterceptor } from "./loading.interceptor";
+import { StoreModule } from "@ngrx/store";
+import { EffectsModule } from "@ngrx/effects";
+import { RedditEffects } from "./store/effects/reddit.effects";
+import { redditReducer } from "./store/reducers/reddit.reducer";
+import { StoreDevtoolsModule } from "@ngrx/store-devtools";
 
 @NgModule({
   declarations: [
@@ -38,9 +43,14 @@ import { LoadingInterceptor } from "./loading.interceptor";
     MatButtonModule,
     MatSelectModule,
     BrowserAnimationsModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    StoreModule.forRoot({ redditState: redditReducer }),
+    EffectsModule.forRoot([RedditEffects]),
+    StoreDevtoolsModule.instrument(),
   ],
-  providers: [{ provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true }],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: LoadingInterceptor, multi: true },
+  ],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

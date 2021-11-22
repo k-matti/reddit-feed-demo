@@ -1,6 +1,6 @@
 <mat-form-field appearance="fill">
     <mat-label>Select how many items to show:</mat-label>
-    <mat-select [value]="currentLimit.toString()" (selectionChange)="onLimitChange($event.value)">
+    <mat-select [value]="(currentLimit$ | async)?.toString()" (selectionChange)="onLimitChange($event.value)">
         <mat-option value="5">5</mat-option>
         <mat-option value="10">10</mat-option>
         <mat-option value="25">25</mat-option>
